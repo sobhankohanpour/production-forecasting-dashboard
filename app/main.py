@@ -1,7 +1,4 @@
 import streamlit as st
-from pages.upload_select_dataset import upload_select_dataset
-from pages.perprocessing import preprocessing
-from pages.ml_trainer import ml_trainer
 
 
 home, upload_dataset, preprocessing_tab, train_ml_model = st.tabs([
@@ -31,9 +28,9 @@ with home:
         "visualizations, and AI-powered predictions designed for real-world petroleum engineering workflows."
         )
 with upload_dataset:
-    uploaded_file = upload_select_dataset()
+    uploaded_file = st.file_uploader("Upload your dataset", type=["csv", "xlsx"])
     uploaded_file
 with preprocessing_tab:
-    preprocessing()
+    st.write("Data preprocessing...")
 with train_ml_model:
-    ml_trainer()
+    st.write("Training the ML model...")
