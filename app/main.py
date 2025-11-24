@@ -64,22 +64,13 @@ with upload_dataset:
         st.write("====================================================")
         st.info("You can upload only `.xlsx` files.")
         number_of_user_dataset = 1
-        st.write(f"You can only upload {number_of_user_dataset} dataset.")
+        uploaded_file = st.file_uploader("Upload your dataset", type=["xlsx"])
+        if uploaded_file:
+            df_uploaded_file = pd.read_excel(uploaded_file)
+            st.session_state['uploaded_dataset'] = df_uploaded_file
+            st.session_state['uploaded_filename'] = uploaded_file.name
+            st.dataframe(df_uploaded_file)
 
-        uploaded_files = []
-        for i in range(number_of_user_dataset):
-            uploaded_file = st.file_uploader(
-                f"Upload dataset #{i+1}", type=["xlsx"], key=f"dataset_{i}"
-            )
-            if uploaded_file:
-                uploaded_file.seek(0)
-                df_uploaded_file = pd.read_excel(uploaded_file)
-                st.dataframe(df_uploaded_file)
-
-                # Save with original name
-                save_path = os.path.join(save_dir, uploaded_file.name)
-                df_uploaded_file.to_excel(save_path, index=False)
-                st.success(f"Dataset #{i+1} saved.")
 
     elif choice == "I want to select from the real-world datasets.":
         st.write("====================================================")
@@ -143,27 +134,18 @@ with upload_dataset:
         </div>
         """, unsafe_allow_html=True)
 
-        
+
+
 with data_eng_tab:
     st.info("Here, you can visualize and process your selected dataset before training your model.")
 
-    # Map dataset labels to their checkbox states
-    selected_datasets = {
-        "North Dakota Natural Gas Production": dataset_1,
-        "North Dakota Cumulative Oil Production by Formation Through 2020": dataset_2,
-        "North Dakota Historical Monthly Oil Production by County": dataset_3,
-        "North Dakota Historical MCF Gas Produced by County": dataset_4
-    }
-
-    # Loop through and display the selected dataset(s)
-    any_selected = False
-    for name, checked in selected_datasets.items():
-        if checked:
-            st.write(f"You selected: {name}")
-            any_selected = True
-            break  # Remove this if you want to allow multiple selections
-
-    if not any_selected:
+    if choice == "I want to upload my dataset." and 'uploaded_dataset' in st.session_state:
+        st.write(f"You selected your uploaded dataset: {st.session_state['uploaded_filename']}")
+        df_to_use = st.session_state['uploaded_dataset']
+    elif choice == "I want to select from the real-world datasets.":
+        st.write(f"You selected: {selected_dataset}")
+        # df_to_use = load_dataset_function(selected_dataset)
+    else:
         st.write("No dataset selected yet.")
 
 
