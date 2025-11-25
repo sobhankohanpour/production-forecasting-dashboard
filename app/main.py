@@ -166,11 +166,21 @@ with data_eng_tab:
     if not df_to_use.empty:
         st.write("Statistical description of your dataset:")
         st.dataframe(df_to_use.describe())
-        if st.toggle("scatterplot"):
+        if st.toggle("Show Scatter Plot"):
+            st.markdown("### Configure your scatter plot")
+
             df_columns = df_to_use.columns.tolist()
-            x = st.radio("x axis:", df_columns)
-            y = st.radio("y axis:", df_columns)
-            scatterplot(df_to_use, x, y)
+
+            # Group the axis selectors side by side
+            col1, col2 = st.columns(2)
+            with col1:
+                x = st.radio("Select X‑axis column:", df_columns, index=0)
+            with col2:
+                y = st.radio("Select Y‑axis column:", df_columns, index=1)
+
+            st.info(f"Plotting **{y}** vs **{x}**")
+
+            scatterplot(df_to_use, x=x, y=y)
 
 
 with train_ml_model:
