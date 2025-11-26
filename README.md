@@ -1,14 +1,14 @@
 # 🛢️ Well Production Forecasting Dashboard
-![License](https://img.shields.io/github/license/sobhankohanpour/production-forcasting-dashboard)
-![Last Commit](https://img.shields.io/github/last-commit/sobhankohanpour/production-forcasting-dashboard)
-![Issues](https://img.shields.io/github/issues/sobhankohanpour/production-forcasting-dashboard)
-![Pull Requests](https://img.shields.io/github/issues-pr/sobhankohanpour/production-forcasting-dashboard)
+![License](https://img.shields.io/github/license/sobhankohanpour/production-forecasting-dashboard)
+![Last Commit](https://img.shields.io/github/last-commit/sobhankohanpour/production-forecasting-dashboard)
+![Issues](https://img.shields.io/github/issues/sobhankohanpour/production-forecasting-dashboard)
+![Pull Requests](https://img.shields.io/github/issues-pr/sobhankohanpour/production-forecasting-dashboard)
 
-![Repo Size](https://img.shields.io/github/repo-size/sobhankohanpour/production-forcasting-dashboard)
-![Code Size](https://img.shields.io/github/languages/code-size/sobhankohanpour/production-forcasting-dashboard)
-![Contributors](https://img.shields.io/github/contributors/sobhankohanpour/production-forcasting-dashboard)
-![Forks](https://img.shields.io/github/forks/sobhankohanpour/production-forcasting-dashboard)
-![GitHub Stars](https://img.shields.io/github/stars/sobhankohanpour/production-forcasting-dashboard)
+![Repo Size](https://img.shields.io/github/repo-size/sobhankohanpour/production-forecasting-dashboard)
+![Code Size](https://img.shields.io/github/languages/code-size/sobhankohanpour/production-forecasting-dashboard)
+![Contributors](https://img.shields.io/github/contributors/sobhankohanpour/production-forecasting-dashboard)
+![Forks](https://img.shields.io/github/forks/sobhankohanpour/production-forecasting-dashboard)
+![GitHub Stars](https://img.shields.io/github/stars/sobhankohanpour/production-forecasting-dashboard)
 
 An interactive Streamlit application for petroleum engineers to visualize, explore, and forecast well production using advanced machine learning and customizable datasets.
 
@@ -43,12 +43,13 @@ production-forecasting-dashboard/
 │
 ├── src/
 │   └── plots.py                    # All plot functions (sns + matplotlib)
+│   └── model.py                    # Machine learning: CART training, evaluation, saving
 │
 ├── strings/
 │   └── strings.py                  # String constants for UI texts, descriptions, and messages
 │
 ├── .gitignore
-└── README.md
+├── README.md
 └── requirements.txt                # Python dependencies
 ```
 
@@ -93,16 +94,19 @@ The dashboard includes **15+ interactive plot types**, grouped into:
 Each plot uses clean, readable Seaborn + Matplotlib visuals optimized for Streamlit.
 
 
-## 🤖 Machine Learning (Coming Soon)
+## 🤖 Machine Learning (CART Decision Tree)
 
-* Model training tab
-* Hyperparameter configuration
-* Train/test split
-* Model evaluation metrics
-* Model comparison
+This app supports CART decision tree models for classification or regression:
+
+- Train on your dataset using any numeric or properly formatted date/time columns
+- Handles non-numeric features automatically (label encoding or timestamp conversion)
+- Evaluate using:
+   - **Accuracy** (for classification)
+   - **MSE** and **R²** (for regression)
+- Save models locally for future predictions
 
 
-## 🔮 Production Prediction (Coming Soon)
+## 🔮 Prediction (Coming Soon)
 
 * Predict well production using trained models
 * Custom input forms
@@ -114,7 +118,7 @@ Each plot uses clean, readable Seaborn + Matplotlib visuals optimized for Stream
 ### **1️⃣ Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/production-forecasting-dashboard.git
+git clone https://github.com/sobhankohanpour/production-forecasting-dashboard
 cd production-forecasting-dashboard
 ```
 
@@ -141,6 +145,8 @@ Core libraries used in this project:
 * `pandas`
 * `matplotlib`
 * `seaborn`
+* `scikit-learn`
+* `joblib`
 
 
 
@@ -173,7 +179,7 @@ You can easily extend or modify these functions for more visualizations.
 
 ## 📄 License
 
-This project is licensed under **MIT License**.
+MIT License
 
 
 ## 🤝 Contributing

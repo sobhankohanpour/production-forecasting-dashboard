@@ -143,7 +143,6 @@ with data_eng_tab:
     if not df_to_use.empty:
         st.subheader("📊 Dataset Overview")
         st.dataframe(df_to_use.describe())
-        st.dataframe(df_to_use.head())
 
         # Master toggle for visualization
         if st.toggle("📈 Enable Data Visualization"):
