@@ -118,7 +118,7 @@ This app supports CART decision tree models for classification or regression:
 ### **1️⃣ Clone the repository**
 
 ```bash
-git clone https://github.com/sobhankohanpour/production-forecasting-dashboard
+git clone https://github.com/sobhankohanpour/production-forecasting-dashboard.git
 cd production-forecasting-dashboard
 ```
 
