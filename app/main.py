@@ -35,20 +35,8 @@ from src.plots import (
     violinplot,
 )
 
-# ───────────────────────────────
-# Local Imports — Strings
-# ───────────────────────────────
 from strings.strings import (
-    DESC_CUMULATIVE_OIL_PRODUCTION_2020,
-    DESC_MCF_GAS_PRODUCTION_BY_COUNTY,
-    DESC_MONTHLY_OIL_PRODUCTION_BY_COUNTY,
-    DESC_NATURAL_GAS_PRODUCTION,
-    NAME_CUMULATIVE_OIL_PRODUCTION_2020,
-    NAME_MCF_GAS_PRODUCTION_BY_COUNTY,
-    NAME_MONTHLY_OIL_PRODUCTION_BY_COUNTY,
-    NAME_NATURAL_GAS_PRODUCTION,
     PLATFORM_DESCRIPTION,
-    UPLOAD_DATASET_INFO,
     UPLOAD_INSTRUCTION,
     WELCOME_MESSAGE,
     WORKFLOW_SUPPORT_MESSAGE,
@@ -59,7 +47,7 @@ from strings.strings import (
 # ───────────────────────────────
 from app.prediction_tab import run_prediction_tab
 from app.train_tab import render_train_tab
-
+from app.upload_tab import run_upload_tab
 
 save_dir = os.path.join("data") 
 
@@ -89,45 +77,7 @@ with home:
 
 
 with upload_dataset:
-    st.info(UPLOAD_DATASET_INFO)
-
-    choice = st.radio(
-        "Choose one option:",
-        ["I want to upload my dataset.", "I want to select from the real-world datasets."]
-    )
-
-    if choice == "I want to upload my dataset.":
-        st.write("====================================================")
-        st.info("You can upload only `.xlsx` files.")
-        number_of_user_dataset = 1
-        uploaded_file = st.file_uploader("Upload your dataset", type=["xlsx"])
-        if uploaded_file:
-            df_uploaded_file = pd.read_excel(uploaded_file)
-            st.session_state['uploaded_dataset'] = df_uploaded_file
-            st.session_state['uploaded_filename'] = uploaded_file.name
-            st.dataframe(df_uploaded_file)
-
-
-    elif choice == "I want to select from the real-world datasets.":
-        st.write("====================================================")
-        DATASET_NAMES = [
-            NAME_NATURAL_GAS_PRODUCTION,
-            NAME_CUMULATIVE_OIL_PRODUCTION_2020,
-            NAME_MONTHLY_OIL_PRODUCTION_BY_COUNTY,
-            NAME_MCF_GAS_PRODUCTION_BY_COUNTY
-        ]
-
-        selected_dataset = st.radio("Select a dataset:", DATASET_NAMES)
-
-        dataset_descriptions = {
-            NAME_NATURAL_GAS_PRODUCTION: DESC_NATURAL_GAS_PRODUCTION,
-            NAME_CUMULATIVE_OIL_PRODUCTION_2020: DESC_CUMULATIVE_OIL_PRODUCTION_2020,
-            NAME_MONTHLY_OIL_PRODUCTION_BY_COUNTY: DESC_MONTHLY_OIL_PRODUCTION_BY_COUNTY,
-            NAME_MCF_GAS_PRODUCTION_BY_COUNTY: DESC_MCF_GAS_PRODUCTION_BY_COUNTY,
-        }
-
-        with st.expander("Dataset Description"):
-            st.write(dataset_descriptions[selected_dataset])
+    run_upload_tab()
 
 
 def load_default_dataset(name):
@@ -145,6 +95,10 @@ def load_default_dataset(name):
 
 with data_eng_tab:
     st.info("Here, you can visualize and process your selected dataset before training your model.")
+    
+    selected_dataset = st.session_state.get("selected_dataset", None)
+
+    choice = st.session_state.get("upload_choice", None)
 
     # Dataset selection
     if choice == "I want to upload my dataset." and 'uploaded_dataset' in st.session_state:
