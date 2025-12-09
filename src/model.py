@@ -6,27 +6,41 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.metrics import accuracy_score, mean_squared_error, r2_score
 from sklearn.preprocessing import LabelEncoder
 
+# ---------------------------
+# Preprocessing function
+# ---------------------------
+def preprocess(df):
+    df = df.copy()
+    for col in df.columns:
+        if df[col].dtype == "object":
+            try:
+                # Try parsing as month-year
+                parsed = pd.to_datetime(df[col], format="%m-%Y", errors="raise")
+                df[col] = parsed.map(lambda x: x.timestamp())
+            except:
+                # Otherwise label encode
+                le = LabelEncoder()
+                df[col] = le.fit_transform(df[col])
+        elif pd.api.types.is_datetime64_any_dtype(df[col]):
+            # Convert datetime columns to numeric timestamp
+            df[col] = df[col].astype("int64") / 1e9
+    return df
+
 
 def train_cart_decision_tree(df, target_column, model_type="classification",
                              test_size=0.2, max_depth=None, min_samples_split=2,
                              criterion="gini"):
 
     # ---------------------------
+    # Preprocess the dataframe
+    # ---------------------------
+    df = preprocess(df)
+
+    # ---------------------------
     # Split X and y
     # ---------------------------
     X = df.drop(columns=[target_column]).copy()
     y = df[target_column].copy()
-
-    # ---------------------------
-    # Convert non-numeric features
-    # ---------------------------
-    for col in X.select_dtypes(include='object').columns:
-        # Try parsing month-year strings
-        X[col] = pd.to_datetime(X[col], errors="coerce").map(lambda x: x.timestamp() if pd.notna(x) else x)
-        # If parsing failed for any row, fall back to label encoding
-        if X[col].isna().any():
-            le = LabelEncoder()
-            X[col] = le.fit_transform(X[col].astype(str))
 
     # ---------------------------
     # Encode target column
